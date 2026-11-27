@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="REIN ONLINE — The Developer's World. Futuristic Anime RPG Portfolio of John Rein M. Pamplona." />
+    <title>REIN ONLINE | The Developer's World</title>
+
+    <!-- Google Fonts: Orbitron, Rajdhani, Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@500;600;700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/intro.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+</head>
+
+<body>
+    <!-- Custom Futuristic Cursor (Desktop) -->
+    <div id="custom-cursor" class="custom-cursor" aria-hidden="true">
+        <div class="cursor-ring"></div>
+        <div class="cursor-dot"></div>
+    </div>
+
+    <!-- Subtle CRT Scanline & Grid Overlay -->
+    <div class="scanline-overlay" aria-hidden="true"></div>
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+    <!-- =========================================================
+       OPENING EXPERIENCE — LINK START SEQUENCE
+       ========================================================= -->
+    <section id="intro-overlay" class="intro-overlay" aria-label="System Initialization">
+        <div class="intro-top-controls">
+            <button id="intro-sound-toggle" class="hud-icon-btn audio-active" type="button"
+                aria-label="Toggle System Audio">
+                <span class="btn-indicator"></span> AUDIO: <span id="intro-audio-state">ON</span>
+            </button>
+            <button id="skip-intro-btn" class="hud-icon-btn skip-btn" type="button">
+                SKIP INTRO &raquo;
+            </button>
+        </div>
+
+        <!-- Scene 1: System Initialization -->
+        <div id="intro-scene-1" class="intro-scene active">
+            <div class="boot-reactor" aria-hidden="true">
+                <div class="reactor-ring ring-outer"></div>
+                <div class="reactor-ring ring-inner"></div>
+                <div class="reactor-core"></div>
+            </div>
+
+            <div class="boot-terminal">
+                <div class="boot-scan-line" aria-hidden="true"></div>
+                <div class="boot-header">
+                    <span class="pulse-dot"></span> NERVEGEAR // VIRTUAL INTERFACE v3.0
+                    <span class="boot-hex" id="boot-hex-code">0x00A1</span>
+                </div>
+                <div id="boot-log" class="boot-log" role="log" aria-live="polite"></div>
+                <div class="boot-progress-wrapper">
+                    <div class="boot-progress-meta">
+                        <span id="boot-status-label">INITIALIZING ENVIRONMENT</span>
+                        <span id="boot-percent">0%</span>
+                    </div>
+                    <div class="boot-progress-track">
+                        <div id="boot-progress-bar" class="boot-progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 2: Welcome Screen -->
+        <div id="intro-scene-2" class="intro-scene">
+            <div class="welcome-frame">
+                <p class="welcome-sub">WELCOME TO THE WORLD OF</p>
+                <h1 class="welcome-title glitch-text" data-text="REIN ONLINE">REIN ONLINE</h1>
+                <p class="welcome-tagline">THE DEVELOPER'S WORLD</p>
+
+                <div class="player-login-card">
+                    <div class="login-row">
+                        <span class="label">PLAYER:</span>
+                        <span class="value">JOHN REIN M. PAMPLONA</span>
+                    </div>
+                    <div class="login-row">
+                        <span class="label">SYSTEM STATUS:</span>
+                        <span class="value status-online"><span class="online-dot"></span> ONLINE</span>
+                    </div>
+                </div>
+
+                <button id="link-start-btn" class="link-start-btn" type="button">
+                    <span class="btn-corner tl"></span>
+                    <span class="btn-corner tr"></span>
+                    <span class="btn-corner bl"></span>
+                    <span class="btn-corner br"></span>
+                    <span class="btn-text">[ LINK START ]</span>
+                </button>
+
+                <p class="link-start-hint">Click anywhere or press <strong>ENTER</strong> to initialize your experience.
+                </p>
+            </div>
+        </div>
+
+        <!-- Scene 3: Link Start Warp Streaks, HUD Rings & Flash -->
+        <div id="intro-scene-3" class="intro-scene link-warp-scene">
+            <canvas id="link-warp-canvas" class="link-warp-canvas" aria-hidden="true"></canvas>
+
+            <div class="link-hud-nodes" aria-hidden="true">
+                <span class="hud-node node-touch">TOUCH</span>
+                <span class="hud-node node-sight">SIGHT</span>
+                <span class="hud-node node-ok">OK</span>
+            </div>
+
+            <div class="scan-rings-container">
+                <div class="scan-ring ring-1"></div>
+                <div class="scan-ring ring-2"></div>
+                <div class="scan-ring ring-3"></div>
+                <h2 class="link-start-burst">LINK START!</h2>
+            </div>
+
+            <div id="flash-overlay" class="flash-overlay"></div>
+        </div>
+    </section>
+
+    <!-- =========================================================
+       SYSTEM NOTIFICATIONS TOAST CONTAINER
+       ========================================================= -->
+    <div id="system-toast-container" class="system-toast-container" aria-live="polite"></div>
+
+    <!-- =========================================================
+       MAIN PORTFOLIO WORLD
+       ========================================================= -->
+    <div id="main-world" class="main-world hidden-world">
+        <!-- Persistent Top Navigation HUD -->
+        <header class="top-hud">
+            <div class="hud-container">
+                <a href="#home" class="brand-logo" data-nav="home">
+                    <span class="logo-diamond"></span>
+                    <div class="brand-text">
+                        <span class="brand-title">REIN ONLINE</span>
+                        <span class="brand-sub">THE DEVELOPER'S WORLD</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hud-nav" aria-label="Main Navigation">
+                    <a href="#home" class="nav-link active" data-section="home">HOME</a>
+                    <a href="#profile" class="nav-link" data-section="profile">PLAYER PROFILE</a>
+                    <a href="#skills" class="nav-link" data-section="skills">SKILLS</a>
+                    <a href="#quests" class="nav-link" data-section="quests">QUESTS / PROJECTS</a>
+                    <a href="#achievements" class="nav-link" data-section="achievements">ACHIEVEMENTS</a>
+                    <a href="#contact" class="nav-link" data-section="contact">CONTACT</a>
+                </nav>
+
+                <!-- HUD Utilities: Clock, Sound, Fullscreen, Mobile Toggle -->
+                <div class="hud-controls">
+                    <div class="hud-clock" title="System Time">
+                        <span class="clock-label">SYS.TIME</span>
+                        <span id="hud-clock-time">00:00:00</span>
+                    </div>
+
+                    <button id="hud-sound-btn" class="hud-ctrl-btn" type="button" title="Toggle Sound Effects"
+                        aria-label="Toggle Sound Effects">
+                        <svg id="sound-icon-on" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                        </svg>
+                        <svg id="sound-icon-off" class="hidden" viewBox="0 0 24 24" width="18" height="18" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <line x1="23" y1="9" x2="17" y2="15"></line>
+                            <line x1="17" y1="9" x2="23" y2="15"></line>
+                        </svg>
+                    </button>
+
+                    <button id="hud-fullscreen-btn" class="hud-ctrl-btn" type="button" title="Toggle Fullscreen"
+                        aria-label="Toggle Fullscreen">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
+                            </path>
+                        </svg>
+                    </button>
+
+                    <button id="mobile-menu-btn" class="hud-ctrl-btn mobile-only" type="button"
+                        aria-label="Open HUD Menu" aria-expanded="false">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Compact Game HUD Drawer -->
+            <div id="mobile-hud-drawer" class="mobile-hud-drawer" aria-hidden="true">
+                <div class="mobile-drawer-header">
+                    <span>// NAVIGATION MENU</span>
+                    <span id="mobile-exploration-text">EXPLORATION: 0%</span>
+                </div>
+                <nav class="mobile-nav-list">
+                    <a href="#home" class="mobile-nav-link" data-section="home">01 // HOME</a>
+                    <a href="#profile" class="mobile-nav-link" data-section="profile">02 // PLAYER PROFILE</a>
+                    <a href="#skills" class="mobile-nav-link" data-section="skills">03 // SKILLS</a>
+                    <a href="#quests" class="mobile-nav-link" data-section="quests">04 // QUESTS / PROJECTS</a>
+                    <a href="#achievements" class="mobile-nav-link" data-section="achievements">05 // ACHIEVEMENTS</a>
+                    <a href="#contact" class="mobile-nav-link" data-section="contact">06 // CONTACT</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Floating Player Status & Exploration Tracker Bar -->
+        <aside class="player-status-hud" aria-label="Player Status HUD">
+            <div class="status-pill">
+                <span class="status-item"><strong>PLAYER:</strong> JOHN REIN</span>
+                <span class="status-divider">|</span>
+                <span class="status-item"><strong>CLASS:</strong> DEVELOPER</span>
+                <span class="status-divider">|</span>
+                <span class="status-item"><strong>LEVEL:</strong> 21</span>
+                <span class="status-divider">|</span>
+                <span class="status-item online-tag"><span class="online-dot"></span> STATUS: ONLINE</span>
+            </div>
+
+            <div class="exploration-tracker" title="Explore all portfolio sections to reach 100%">
+                <div class="exploration-label">
+                    <span>PORTFOLIO EXPLORATION:</span>
+                    <span id="exploration-percent">0%</span>
+                </div>
+                <div class="exploration-bar-bg">
+                    <div id="exploration-bar-fill" class="exploration-bar-fill"></div>
+                </div>
+            </div>
+        </aside>
+
+        <main>
+            <!-- =========================================================
+           SECTION 1: HOME / PLAYER INTRODUCTION
+           ========================================================= -->
+            <section id="home" class="portfolio-section hero-section" data-section-name="HOME">
+                <div class="digital-grid-bg" aria-hidden="true"></div>
+                <div class="container hero-grid">
+                    <div class="hero-content reveal-item">
+                        <div class="sys-badge">
+                            <span class="badge-dot"></span> [ SYSTEM_LINK_ESTABLISHED // SECTOR_01 ]
+                        </div>
+
+                        <h1 class="hero-title">
+                            WELCOME, PLAYER.<br />
+                            <span class="highlight-cyan">I'M JOHN REIN M. PAMPLONA.</span>
+                        </h1>
+
+                        <p class="hero-subtitle">
+                            BSIT STUDENT | ASPIRING SOFTWARE DEVELOPER | ASPIRING NETWORK ENGINEER
+                        </p>
+
+                        <p class="hero-description">
+                            "Passionate IT student and creative programmer dedicated to crafting clean code, responsive
+                            web applications, and reliable network solutions."
+                        </p>
+
+                        <div class="hero-actions">
+                            <a href="#profile" class="rpg-btn primary-btn" data-sound="click">
+                                <span>[ VIEW PLAYER PROFILE ]</span>
+                            </a>
+                            <a href="#quests" class="rpg-btn secondary-btn" data-sound="click">
+                                <span>[ EXPLORE PROJECTS ]</span>
+                            </a>
+                        </div>
+
+                        <div class="hero-telemetry">
+                            <div class="telemetry-box">
+                                <span class="t-label">SERVER</span>
+                                <span class="t-val">CALAMBA-PH</span>
+                            </div>
+                            <div class="telemetry-box">
+                                <span class="t-label">GUILD</span>
+                                <span class="t-val">CCC-BSIT</span>
+                            </div>
+                            <div class="telemetry-box">
+                                <span class="t-label">QUESTS</span>
+                                <span class="t-val">04 CLEARED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Futuristic Holographic Avatar Frame -->
+                    <div class="hero-avatar-wrapper reveal-item">
+                        <div class="holo-frame">
+                            <div class="holo-ring outer-ring"></div>
+                            <div class="holo-ring inner-ring"></div>
+                            <div class="holo-corners">
+                                <span></span><span></span><span></span><span></span>
+                            </div>
+
+                            <div class="avatar-image-container">
+                                <img src="assets/images/profile.png" alt="John Rein M. Pamplona"
+                                    class="player-avatar-img"
+                                    onerror="this.onerror=null; this.src='assets/images/profiles.png';" />
+                                <div class="avatar-scan-bar"></div>
+                            </div>
+
+                            <div class="holo-tag top-tag">ID: #0912-REIN</div>
+                            <div class="holo-tag bottom-tag">LV.21 // BSIT-3RD-YR</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+           SECTION 2: PLAYER PROFILE — ABOUT ME
+           ========================================================= -->
+            <section id="profile" class="portfolio-section" data-section-name="PLAYER PROFILE">
+                <div class="container">
+                    <div class="section-header reveal-item">
+                        <span class="section-tag">// CHARACTER_STATUS_WINDOW</span>
+                        <h2 class="section-title">PLAYER INFORMATION</h2>
+                    </div>
+
+                    <div class="profile-window holo-panel reveal-item">
+                        <div class="panel-top-bar">
+                            <span class="panel-title">STATUS // BIOGRAPHICAL DATA</span>
+                            <span class="panel-code">VERIFIED_RECORD</span>
+                        </div>
+
+                        <div class="profile-grid">
+                            <div class="profile-specs">
+                                <div class="spec-item">
+                                    <span class="spec-label">PLAYER NAME</span>
+                                    <span class="spec-value">John Rein M. Pamplona</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">LOCATION</span>
+                                    <span class="spec-value">Calamba City, Laguna, Philippines</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">EDUCATION</span>
+                                    <span class="spec-value">Bachelor of Science in Information Technology (BSIT)</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">SCHOOL</span>
+                                    <span class="spec-value">City College of Calamba</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">CURRENT YEAR</span>
+                                    <span class="spec-value">3rd Year College Student</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-bio-area">
+                                <h3 class="sub-panel-heading">ABOUT ME</h3>
+                                <p class="bio-text">
+                                    I am John Rein M. Pamplona, currently a 3rd Year College student at City College of
+                                    Calamba pursuing a Bachelor of Science in Information Technology (BSIT).
+                                </p>
+                                <p class="bio-text">
+                                    My academic journey has equipped me with a solid foundation in Software Development
+                                    Principles, Database Management, Cybersecurity Fundamentals, Networking
+                                    Fundamentals, AI Skills, and Modern Web Architectures.
+                                </p>
+                                <p class="bio-text">
+                                    Aside from coding, I'm into design, playing various games, breaking down complex
+                                    problems, and testing out new tools that might come in handy down the road. Even
+                                    when I lean on AI for help, I take the time to dissect and learn from every answer
+                                    it throws at me. I'm focusing on leveling up my skills and growing into a solid
+                                    professional in the future.
+                                </p>
+
+                                <!-- Holographic Quotation Panel -->
+                                <blockquote class="holo-quote-panel">
+                                    <div class="quote-header">[ SYSTEM_LOG // PERSONAL_PHILOSOPHY ]</div>
+                                    <p class="quote-body">
+                                        "I believe that AI is not a cheat code. It is a tool that bridges the gap
+                                        between imagination and execution when paired with solid fundamentals and
+                                        critical thinking."
+                                    </p>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+           SECTION 3: SKILLS — PLAYER ATTRIBUTES
+           ========================================================= -->
+            <section id="skills" class="portfolio-section" data-section-name="PLAYER ATTRIBUTES">
+                <div class="container">
+                    <div class="section-header reveal-item">
+                        <span class="section-tag">// ABILITY_TREE_AND_MODULES</span>
+                        <h2 class="section-title">PLAYER ATTRIBUTES</h2>
+                        <p class="section-desc">Select any equipped skill module to inspect its operational role.</p>
+                    </div>
+
+                    <!-- Active Skill Inspector Drawer -->
+                    <div id="skill-inspector" class="skill-inspector holo-panel reveal-item" aria-live="polite">
+                        <div class="inspector-left">
+                            <span class="inspector-badge" id="inspector-category">SELECT MODULE</span>
+                            <h3 class="inspector-title" id="inspector-name">Click a skill card below to inspect</h3>
+                            <p class="inspector-desc" id="inspector-detail">
+                                All technical domains and interpersonal attributes are categorized into active RPG
+                                ability slots.
+                            </p>
+                        </div>
+                        <div class="inspector-right">
+                            <span class="inspector-tier" id="inspector-tier">STATUS: EQUIPPED</span>
+                        </div>
+                    </div>
+
+                    <!-- Skill Categories Grid -->
+                    <div id="skills-grid" class="skills-categories-grid"></div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+           SECTION 4: QUESTS — PROJECT SHOWCASE
+           ========================================================= -->
+            <section id="quests" class="portfolio-section" data-section-name="COMPLETED QUESTS">
+                <div class="container">
+                    <div class="section-header reveal-item">
+                        <span class="section-tag">// QUEST_LOG_ARCHIVE</span>
+                        <h2 class="section-title">COMPLETED QUESTS</h2>
+                        <p class="section-desc">Inspect cleared development missions and live system deployments.</p>
+                    </div>
+
+                    <div id="quests-grid" class="quests-grid"></div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+           SECTION 5: ACHIEVEMENTS & CERTIFICATIONS
+           ========================================================= -->
+            <section id="achievements" class="portfolio-section" data-section-name="ACHIEVEMENTS">
+                <div class="container">
+                    <div class="section-header reveal-item">
+                        <span class="section-tag">// TROPHY_VAULT_UNLOCKED</span>
+                        <h2 class="section-title">ACHIEVEMENTS &amp; CERTIFICATIONS</h2>
+                        <p class="section-desc">Verified training milestones and academic recognition badges.</p>
+                    </div>
+
+                    <div id="achievements-grid" class="achievements-grid"></div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+           SECTION 6: RESUME DOWNLOAD — PLAYER DATA EXPORT
+           ========================================================= -->
+            <section id="resume-export" class="portfolio-section" data-section-name="DATA EXPORT">
+                <div class="container">
+                    <div class="export-panel holo-panel reveal-item">
+                        <div class="export-info">
+                            <span class="section-tag">// CHARACTER_SHEET_GENERATOR</span>
+                            <h2 class="export-title">EXPORT PLAYER DATA</h2>
+                            <p class="export-desc">
+                                Download the professional resume of John Rein M. Pamplona.
+                            </p>
+                        </div>
+                        <div class="export-actions">
+                            <button id="download-resume-btn" class="rpg-btn primary-btn" type="button">
+                                <span>[ DOWNLOAD RESUME PDF ]</span>
+                            </button>
+                            <a href="assets/images/resume/Resume.pdf" target="_blank" rel="noopener noreferrer"
+                                class="rpg-btn secondary-btn">
+                                <span>[ VIEW ATTACHED PDF ]</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================================
+           SECTION 7: CONTACT — ESTABLISH CONNECTION
+           ========================================================= -->
+            <section id="contact" class="portfolio-section" data-section-name="ESTABLISH CONNECTION">
+                <div class="container">
+                    <div class="section-header reveal-item">
+                        <span class="section-tag">// DIRECT_COMM_LINK</span>
+                        <h2 class="section-title">ESTABLISH CONNECTION</h2>
+                    </div>
+
+                    <div class="contact-grid">
+                        <!-- Communication Terminal Info -->
+                        <div class="comm-terminal holo-panel reveal-item">
+                            <div class="panel-top-bar">
+                                <span class="panel-title">PLAYER // TRANSMISSION DETAILS</span>
+                                <span class="panel-code status-online">CHANNEL_OPEN</span>
+                            </div>
+
+                            <div class="comm-list">
+                                <div class="comm-row">
+                                    <span class="comm-label">PLAYER</span>
+                                    <span class="comm-val">John Rein M. Pamplona</span>
+                                </div>
+                                <div class="comm-row">
+                                    <span class="comm-label">EMAIL</span>
+                                    <span class="comm-val">johnreinpamplona12@gmail.com</span>
+                                </div>
+                                <div class="comm-row">
+                                    <span class="comm-label">PHONE</span>
+                                    <span class="comm-val">09359386414</span>
+                                </div>
+                                <div class="comm-row">
+                                    <span class="comm-label">LOCATION</span>
+                                    <span class="comm-val">Calamba City, Laguna, Philippines</span>
+                                </div>
+                                <div class="comm-row">
+                                    <span class="comm-label">FACEBOOK</span>
+                                    <a href="https://www.facebook.com/pamplona.johnrein" target="_blank"
+                                        rel="noopener noreferrer" class="comm-link">
+                                        facebook.com/pamplona.johnrein &nearr;
+                                    </a>
+                                </div>
+                                <div class="comm-row">
+                                    <span class="comm-label">LinkedIn</span>
+                                    <a href="https://www.linkedin.com/in/reinpamps/" target="_blank"
+                                        rel="noopener noreferrer" class="comm-link">
+                                        linkedin.com/in/johnreinpamplona &nearr;
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="comm-quick-buttons">
+                                <a href="mailto:johnreinpamplona12@gmail.com" class="rpg-btn primary-btn">
+                                    <span>[ EMAIL ME ]</span>
+                                </a>
+                                <a href="tel:09359386414" class="rpg-btn secondary-btn">
+                                    <span>[ CALL ME ]</span>
+                                </a>
+                                <a href="https://www.facebook.com/pamplona.johnrein" target="_blank"
+                                    rel="noopener noreferrer" class="rpg-btn secondary-btn">
+                                    <span>[ FACEBOOK ]</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Frontend-Validated Message Terminal -->
+                        <div class="comm-form-panel holo-panel reveal-item">
+                            <div class="panel-top-bar">
+                                <span class="panel-title">DIRECT MESSAGE</span>
+                                <span class="panel-code">FEEL FREE TO REACH OUT</span>
+                            </div>
+
+                            <form id="contact-form" class="rpg-form" action="https://formspree.io/f/xbgoobpw"
+                                method="POST" novalidate>
+                                <div class="form-group">
+                                    <label for="sender-name">SENDER IDENTIFIER (NAME)</label>
+                                    <input type="text" id="sender-name" name="name" placeholder="Enter your name"
+                                        required />
+                                    <small class="field-error" id="error-name"></small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="sender-email">RETURN FREQUENCY (EMAIL)</label>
+                                    <input type="email" id="sender-email" name="email" placeholder="you@example.com"
+                                        required />
+                                    <small class="field-error" id="error-email"></small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="sender-subject">TRANSMISSION SUBJECT</label>
+                                    <input type="text" id="sender-subject" name="subject"
+                                        placeholder="Collaboration / Project Inquiry" required />
+                                    <small class="field-error" id="error-subject"></small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="sender-message">DATA PAYLOAD (MESSAGE)</label>
+                                    <textarea id="sender-message" name="message" rows="4"
+                                        placeholder="Write your message here..." required></textarea>
+                                    <small class="field-error" id="error-message"></small>
+                                </div>
+
+                                <button type="submit" id="contact-submit-btn" class="rpg-btn primary-btn full-width">
+                                    <span>[ SEND TRANSMISSION ]</span>
+                                </button>
+
+                                <div id="form-notice" class="form-notice" role="status" aria-live="polite"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="world-footer">
+            <div class="container footer-content">
+                <p class="footer-brand">REIN ONLINE // MY OWN GAMING WORLD</p>
+                <p class="footer-copy">&copy; <span id="current-year"></span> John Rein M. Pamplona. All Rights
+                    Reserved.</p>
+            </div>
+        </footer>
+
+        <!-- Floating Back to Top HUD Button -->
+        <button id="back-to-top-btn" class="back-to-top-btn" type="button" aria-label="Return to Top">
+            <span>&uarr; TOP</span>
+        </button>
+    </div>
+
+    <!-- =========================================================
+       PROJECT & CERTIFICATE DETAILS MODAL
+       ========================================================= -->
+    <div id="rpg-modal" class="rpg-modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-backdrop" id="modal-backdrop"></div>
+        <div class="modal-window holo-panel">
+            <div class="modal-header">
+                <span id="modal-badge" class="modal-badge">QUEST DETAILS</span>
+                <button id="modal-close-btn" class="modal-close-btn" type="button" aria-label="Close Window">[ X
+                    ]</button>
+            </div>
+            <div id="modal-loading-bar" class="modal-loading-bar"></div>
+            <div id="modal-body" class="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Client-Side PDF Library (jsPDF CDN for clean ATS resume generation) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Modular JavaScript Files -->
+    <script src="js/animations.js"></script>
+    <script src="js/intro.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/projects.js"></script>
+    <script src="js/resume.js"></script>
+    <script src="js/interactions.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

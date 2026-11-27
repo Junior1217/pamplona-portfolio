@@ -1,0 +1,116 @@
+/* =========================================================
+   REIN ONLINE — RESPONSIVE BREAKPOINTS
+   ========================================================= */
+@media (max-width: 1024px) {
+    .hud-nav {
+        display: none;
+    }
+
+    .mobile-only {
+        display: inline-flex;
+    }
+
+    .hero-grid {
+        grid-template-columns: minmax(0, 1fr);
+        text-align: center;
+    }
+
+    .hero-description {
+        margin-left: auto;
+        margin-right: auto;
+        border-left: none;
+        padding-left: 0;
+    }
+
+    .hero-actions,
+    .hero-telemetry {
+        justify-content: center;
+    }
+
+    .profile-grid,
+    .contact-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .profile-specs {
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 217, 255, 0.18);
+        padding-right: 0;
+        padding-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 680px) {
+    .player-status-hud {
+        padding: 0.4rem 1rem;
+        font-size: 0.74rem;
+    }
+
+    .exploration-tracker {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .hero-section {
+        padding-top: 10.5rem;
+    }
+
+    .holo-frame {
+        width: 260px;
+        height: 300px;
+    }
+
+    .avatar-image-container {
+        width: 215px;
+        height: 250px;
+    }
+
+    .outer-ring {
+        width: 270px;
+        height: 270px;
+    }
+
+    .inner-ring {
+        width: 235px;
+        height: 235px;
+    }
+
+    .skill-inspector {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .skills-categories-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .skill-chips-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .quests-grid,
+    .achievements-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .system-toast-container {
+        top: 132px;
+        right: 12px;
+        left: auto;
+        bottom: auto;
+        width: min(290px, calc(100vw - 24px));
+        max-width: none;
+    }
+
+    .system-toast {
+        padding: 0.6rem 0.85rem;
+    }
+
+    .toast-body {
+        font-size: 0.82rem;
+    }
+
+    .hud-clock {
+        display: none;
+    }
+}
