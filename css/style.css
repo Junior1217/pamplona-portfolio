@@ -262,6 +262,11 @@ body {
     box-shadow: var(--glow-cyan);
 }
 
+.hud-ctrl-btn:active {
+    transform: none;
+    scale: 1;
+}
+
 .mobile-only {
     display: none;
 }

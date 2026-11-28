@@ -287,14 +287,14 @@ html.rein-cursor-dot input, html.rein-cursor-dot textarea { cursor: text !import
 
         // 'dot' style motion: dot is exact, ring trails smoothly
         let tx = 0, ty = 0, dx = 0, dy = 0, rx = 0, ry = 0;
-        let scale = 1, hovering = false, pressed = false, visible = false, raf = 0;
+        let scale = 1, hovering = false, visible = false, raf = 0;
 
         const loop = () => {
             dx += (tx - dx) * 0.65;
             dy += (ty - dy) * 0.65;
             rx += (tx - rx) * 0.18;
             ry += (ty - ry) * 0.18;
-            const target = pressed ? 0.8 : hovering ? 1.5 : 1;
+            const target = hovering ? 1.5 : 1;
             scale += (target - scale) * 0.22;
 
             dot.style.translate = `${dx.toFixed(1)}px ${dy.toFixed(1)}px`;
@@ -323,8 +323,6 @@ html.rein-cursor-dot input, html.rein-cursor-dot textarea { cursor: text !import
             visible = false;
             cursor.classList.remove('visible');
         });
-        document.addEventListener('pointerdown', () => { pressed = true; kick(); });
-        document.addEventListener('pointerup', () => { pressed = false; kick(); });
         document.addEventListener('mouseover', (e) => {
             hovering = Boolean(e.target.closest('a, button, input, textarea, [role="button"], .quest-card, .achievement-card, .skill-chip'));
             cursor.classList.toggle('hovering', hovering);
