@@ -136,25 +136,34 @@ const ReinNav = (() => {
         if (barEl) barEl.style.width = `${percent}%`;
     }
 
+    function dismissToast(toast) {
+        if (!toast || toast.classList.contains('leaving')) return;
+        toast.classList.add('leaving');
+        const remove = () => toast.remove();
+        toast.addEventListener('animationend', remove, { once: true });
+        setTimeout(remove, 700); // safety net
+    }
+
     function showSystemToast(message) {
         const container = document.getElementById('system-toast-container');
         if (!container) return;
+
+        // keep the stack tidy: at most 3 live toasts
+        const live = container.querySelectorAll('.system-toast:not(.leaving)');
+        if (live.length >= 3) dismissToast(live[0]);
 
         const toast = document.createElement('div');
         toast.className = 'system-toast';
         toast.innerHTML = `
       <div class="toast-header">[ SYSTEM MESSAGE ]</div>
       <div class="toast-body">${message}</div>
+      <div class="toast-progress"></div>
     `;
 
         container.appendChild(toast);
         ReinFX.playTone('notify');
 
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            toast.style.transition = 'opacity 0.35s ease';
-            setTimeout(() => toast.remove(), 350);
-        }, 3200);
+        setTimeout(() => dismissToast(toast), 3400);
     }
 
     return {

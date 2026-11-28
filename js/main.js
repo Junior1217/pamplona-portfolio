@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ReinResume.init();
     ReinInteractions.init();
 
+    // Spotlight, 3D tilt, magnetic buttons, ripples, parallax, scroll progress
+    ReinFX.initMotion();
+
     // Initialize LINK START intro and trigger scroll reveals upon entry
     ReinIntro.init((showWelcomeToast) => {
         ReinFX.initScrollReveal();

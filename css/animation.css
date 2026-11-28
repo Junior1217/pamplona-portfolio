@@ -1,227 +1,708 @@
 /* =========================================================
-   REIN ONLINE — KEYFRAMES & REVEAL TRANSITIONS
+   REIN ONLINE — MOTION SYSTEM (KEYFRAMES, REVEALS, MICRO-INTERACTIONS)
+   Easing philosophy: everything that "arrives" decelerates (expo-out),
+   everything that "leaves" accelerates (ease-in), and UI pops use a
+   small spring overshoot. Nothing moves linearly except spinners.
    ========================================================= */
-@keyframes sceneFadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.97);
-    }
+:root {
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
 
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+/* ---------- SCENE / BOOT KEYFRAMES ---------- */
+@keyframes sceneFadeIn {
+    from { opacity: 0; transform: scale(0.97); filter: blur(6px); }
+    to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+@keyframes sceneOut {
+    from { opacity: 1; transform: none; filter: blur(0); }
+    to   { opacity: 0; transform: scale(1.06); filter: blur(8px); }
 }
 
 @keyframes bootLineIn {
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes bootScan {
-    0% {
-        top: 0%;
-    }
+    0%   { top: 0%; }
+    100% { top: 100%; }
+}
 
-    100% {
-        top: 100%;
-    }
+/* CRT power-on: a thin line stretches sideways, then the screen opens up */
+@keyframes crtOn {
+    0%   { opacity: 0; transform: scale(0, 0.004); filter: brightness(5); }
+    30%  { opacity: 1; transform: scale(1, 0.004); filter: brightness(5); }
+    72%  { opacity: 1; transform: scale(1, 1); filter: brightness(1.8); }
+    100% { opacity: 1; transform: scale(1, 1); filter: brightness(1); }
 }
 
 @keyframes coreBeat {
-
-    0%,
-    100% {
-        transform: scale(0.92);
-        opacity: 0.8;
-    }
-
-    50% {
-        transform: scale(1.15);
-        opacity: 1;
-    }
+    0%, 100% { transform: scale(0.92); opacity: 0.8; }
+    50%      { transform: scale(1.15); opacity: 1; }
 }
 
 @keyframes cursorBlink {
-
-    0%,
-    50% {
-        opacity: 1;
-    }
-
-    51%,
-    100% {
-        opacity: 0;
-    }
+    0%, 50%   { opacity: 1; }
+    51%, 100% { opacity: 0; }
 }
 
 @keyframes pulseGlow {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(0.85); }
+}
 
-    0%,
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-    50% {
-        opacity: 0.4;
-        transform: scale(0.85);
-    }
+@keyframes onlinePulse {
+    0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.65); }
+    70%  { box-shadow: 0 0 0 9px rgba(34, 197, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
 }
 
 @keyframes linkStartPulse {
-
-    0%,
-    100% {
-        box-shadow: 0 0 22px rgba(0, 217, 255, 0.35), inset 0 0 14px rgba(0, 217, 255, 0.2);
-    }
-
-    50% {
-        box-shadow: 0 0 40px rgba(0, 217, 255, 0.7), inset 0 0 24px rgba(0, 217, 255, 0.38);
-    }
+    0%, 100% { box-shadow: 0 0 22px rgba(0, 217, 255, 0.35), inset 0 0 14px rgba(0, 217, 255, 0.2); }
+    50%      { box-shadow: 0 0 44px rgba(0, 217, 255, 0.75), inset 0 0 26px rgba(0, 217, 255, 0.4); }
 }
 
+@keyframes riseIn {
+    from { opacity: 0; translate: 0 20px; filter: blur(5px); }
+    to   { opacity: 1; translate: 0 0; filter: blur(0); }
+}
+
+@keyframes hintBreathe {
+    0%, 100% { opacity: 0.55; }
+    50%      { opacity: 1; }
+}
+
+@keyframes titleIn {
+    0%   { opacity: 0; letter-spacing: 0.5em; filter: blur(14px); transform: scale(1.12); }
+    55%  { opacity: 1; filter: blur(0); }
+    100% { opacity: 1; letter-spacing: 0.12em; filter: blur(0); transform: none; }
+}
+
+/* RGB-split glitch: idle most of the time, then a quick burst */
+@keyframes glitchA {
+    0%, 86%, 100% { opacity: 0; transform: translate(0); clip-path: inset(0 0 0 0); }
+    87% { opacity: 0.9; transform: translate(-5px, 1px); clip-path: inset(10% 0 62% 0); }
+    89% { transform: translate(4px, -1px); clip-path: inset(56% 0 18% 0); }
+    91% { transform: translate(-3px, 0); clip-path: inset(30% 0 40% 0); }
+    93% { opacity: 0.9; transform: translate(5px, 1px); clip-path: inset(74% 0 4% 0); }
+    95% { opacity: 0; }
+}
+
+@keyframes glitchB {
+    0%, 86%, 100% { opacity: 0; transform: translate(0); clip-path: inset(0 0 0 0); }
+    88% { opacity: 0.9; transform: translate(5px, -1px); clip-path: inset(48% 0 26% 0); }
+    90% { transform: translate(-4px, 1px); clip-path: inset(8% 0 70% 0); }
+    92% { transform: translate(3px, 0); clip-path: inset(64% 0 12% 0); }
+    94% { opacity: 0.9; transform: translate(-5px, -1px); clip-path: inset(22% 0 52% 0); }
+    96% { opacity: 0; }
+}
+
+@keyframes glitchShake {
+    0%, 86%, 96%, 100% { translate: 0 0; }
+    88% { translate: -2px 0; }
+    90% { translate: 3px 0; }
+    92% { translate: -1px 0; }
+    94% { translate: 2px 0; }
+}
+
+/* ---------- LINK START KEYFRAMES ---------- */
 @keyframes ringExpand {
-    0% {
-        transform: scale(0.3);
-        opacity: 1;
-    }
-
-    100% {
-        transform: scale(3.6);
-        opacity: 0;
-    }
+    0%   { transform: scale(0.3); opacity: 1; }
+    100% { transform: scale(3.6); opacity: 0; }
 }
 
+@keyframes shockwave {
+    0%   { transform: scale(0.2); opacity: 0.95; border-width: 7px; }
+    100% { transform: scale(16); opacity: 0; border-width: 1px; }
+}
+
+/* Letters rush in from the camera, hold, then fly past it */
 @keyframes burstZoom {
-    0% {
-        transform: scale(0.7);
-        opacity: 0;
-    }
-
-    40% {
-        transform: scale(1.08);
-        opacity: 1;
-    }
-
-    100% {
-        transform: scale(1.18);
-        opacity: 1;
-    }
+    0%   { opacity: 0; transform: scale(1.6); filter: blur(14px); letter-spacing: 0.5em; }
+    18%  { opacity: 1; transform: scale(1); filter: blur(0); letter-spacing: 0.16em;
+           animation-timing-function: linear; }
+    70%  { opacity: 1; transform: scale(1.05); filter: blur(0); letter-spacing: 0.18em;
+           animation-timing-function: cubic-bezier(0.7, 0, 0.84, 0); }
+    100% { opacity: 0; transform: scale(3.4); filter: blur(10px); letter-spacing: 0.32em; }
 }
 
 @keyframes hudNodePop {
-    0% {
-        opacity: 0;
-        transform: scale(0.65) translateY(8px);
-    }
+    0%   { opacity: 0; transform: scale(0.65) translateY(8px); }
+    22%  { opacity: 1; transform: scale(1.08) translateY(0); }
+    30%  { opacity: 0.6; }
+    36%  { opacity: 1; }
+    80%  { opacity: 1; transform: scale(1) translateY(-4px); }
+    100% { opacity: 0; transform: scale(1.14) translateY(-12px); }
+}
 
-    30% {
-        opacity: 1;
-        transform: scale(1.06) translateY(0);
-    }
+@keyframes flareSweep {
+    0%   { opacity: 0; scale: 0 1; }
+    25%  { opacity: 1; scale: 1 1; }
+    100% { opacity: 0; scale: 1.1 0.2; }
+}
 
-    80% {
-        opacity: 1;
-        transform: scale(1) translateY(-4px);
-    }
-
-    100% {
-        opacity: 0;
-        transform: scale(1.12) translateY(-10px);
-    }
+@keyframes vignetteIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 @keyframes screenFlash {
-    0% {
-        opacity: 0;
-    }
-
-    35% {
-        opacity: 0.95;
-    }
-
-    100% {
-        opacity: 0;
-    }
+    0%   { opacity: 0; }
+    28%  { opacity: 1; }
+    55%  { opacity: 0.9; }
+    100% { opacity: 0; }
 }
 
+@keyframes overlayShake {
+    0%, 100% { translate: 0 0; }
+    15% { translate: -6px 3px; }
+    30% { translate: 5px -4px; }
+    45% { translate: -4px -2px; }
+    60% { translate: 3px 4px; }
+    80% { translate: -1px 1px; }
+}
+
+/* ---------- WORLD ENTER ---------- */
+@keyframes worldZoomIn {
+    from { opacity: 0; scale: 1.08; filter: blur(10px) brightness(1.8); }
+    to   { opacity: 1; scale: 1; filter: blur(0) brightness(1); }
+}
+
+@keyframes hudDrop {
+    from { opacity: 0; translate: 0 -100%; }
+    to   { opacity: 1; translate: 0 0; }
+}
+
+/* ---------- AMBIENT LOOPS ---------- */
 @keyframes avatarScan {
-    0% {
-        top: 0%;
-        opacity: 0.2;
-    }
-
-    50% {
-        opacity: 0.95;
-    }
-
-    100% {
-        top: 100%;
-        opacity: 0.2;
-    }
+    0%   { top: 0%; opacity: 0.2; }
+    50%  { opacity: 0.95; }
+    100% { top: 100%; opacity: 0.2; }
 }
 
 @keyframes spinSlow {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
 }
 
 @keyframes spinReverse {
-    from {
-        transform: rotate(360deg);
-    }
-
-    to {
-        transform: rotate(0deg);
-    }
+    from { transform: rotate(360deg); }
+    to   { transform: rotate(0deg); }
 }
 
+@keyframes floatY {
+    0%, 100% { translate: 0 0; }
+    50%      { translate: 0 -10px; }
+}
+
+@keyframes holoFlicker {
+    0%, 90%, 100% { filter: none; }
+    91% { filter: brightness(1.45) saturate(1.3); }
+    92% { filter: none; }
+    93% { filter: brightness(0.75); }
+    94% { filter: none; }
+}
+
+@keyframes gridDrift {
+    from { transform: translate(0, 0); }
+    to   { transform: translate(48px, 48px); }
+}
+
+@keyframes shimmer {
+    from { translate: -100% 0; }
+    to   { translate: 250% 0; }
+}
+
+@keyframes rippleOut {
+    to { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+
+@keyframes shakeX {
+    0%, 100% { translate: 0 0; }
+    20% { translate: -5px 0; }
+    40% { translate: 5px 0; }
+    60% { translate: -3px 0; }
+    80% { translate: 2px 0; }
+}
+
+/* ---------- TOASTS ---------- */
 @keyframes toastSlideIn {
-    from {
-        opacity: 0;
-        transform: translateX(24px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    from { opacity: 0; translate: 48px 0; scale: 0.94; }
+    to   { opacity: 1; translate: 0 0; scale: 1; }
 }
 
-/* Scroll Reveal Classes */
+@keyframes toastOut {
+    0%   { opacity: 1; translate: 0 0; max-height: 120px; }
+    55%  { opacity: 0; translate: 36px 0; max-height: 120px; }
+    100% { opacity: 0; translate: 36px 0; max-height: 0; padding-top: 0; padding-bottom: 0;
+           margin-bottom: -0.65rem; border-width: 0; }
+}
+
+@keyframes toastProgress {
+    from { transform: scaleX(1); }
+    to   { transform: scaleX(0); }
+}
+
+/* =========================================================
+   SCROLL REVEAL
+   Classes are added/removed by ReinFX.initScrollReveal().
+   `.revealed` stays on the element permanently (other effects use
+   it); `.reveal-item` is removed once finished so hover transitions
+   on cards work normally afterwards.
+   ========================================================= */
 .reveal-item {
     opacity: 0;
-    transform: translateY(22px);
-    transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(30px) scale(0.985);
+    transition: opacity 0.9s var(--ease-out), transform 1s var(--ease-out), filter 0.9s var(--ease-out);
 }
 
-.reveal-item.revealed {
+.section-header.reveal-item {
+    transform: translateY(20px);
+    filter: blur(6px);
+}
+
+.hero-avatar-wrapper.reveal-item {
+    transform: translateX(46px) scale(0.9);
+}
+
+/* Hero copy animates child-by-child instead of as a block */
+.hero-content.reveal-item {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
+    transition: none;
 }
 
-/* Reduced Motion Accessibility */
-@media (prefers-reduced-motion: reduce) {
+.reveal-item.revealed,
+.section-header.reveal-item.revealed,
+.hero-avatar-wrapper.reveal-item.revealed {
+    opacity: 1;
+    transform: none;
+    filter: none;
+}
 
+/* Section header: accent line draws itself under the title */
+.section-header {
+    position: relative;
+}
+
+.section-header::after {
+    content: '';
+    display: block;
+    height: 2px;
+    width: 0;
+    margin-top: 1rem;
+    background: linear-gradient(90deg, var(--accent-primary), transparent);
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+    transition: width 1.2s var(--ease-out) 0.35s;
+}
+
+.section-header.revealed::after {
+    width: min(280px, 60%);
+}
+
+.sc-word {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.sc-char {
+    display: inline-block;
+    text-align: center;
+}
+
+/* Hero cascade */
+.hero-content > * {
+    opacity: 0;
+    animation: riseIn 1s var(--ease-out) both paused;
+}
+
+.hero-content > :nth-child(1) { animation-delay: 0.15s; }
+.hero-content > :nth-child(2) { animation-delay: 0.30s; }
+.hero-content > :nth-child(3) { animation-delay: 0.50s; }
+.hero-content > :nth-child(4) { animation-delay: 0.65s; }
+.hero-content > :nth-child(5) { animation-delay: 0.80s; }
+.hero-content > :nth-child(6) { animation-delay: 1.00s; }
+
+.hero-content.revealed > * {
+    animation-play-state: running;
+}
+
+/* Skill modules: chips cascade in, meters charge up left-to-right */
+.skill-category-card .skill-chip {
+    opacity: 0;
+    translate: 0 12px;
+    transition:
+        opacity 0.7s var(--ease-out) calc(var(--m, 0) * 60ms + 0.25s),
+        translate 0.7s var(--ease-out) calc(var(--m, 0) * 60ms + 0.25s),
+        border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.skill-category-card.revealed .skill-chip {
+    opacity: 1;
+    translate: 0 0;
+}
+
+.skill-chip:active {
+    transform: scale(0.97);
+}
+
+.skill-category-card .skill-meter-segment {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.3s var(--ease-out) calc(var(--m, 0) * 70ms + 0.5s);
+}
+
+.skill-category-card.revealed .skill-meter-segment {
+    transform: scaleX(1);
+}
+
+/* =========================================================
+   WORLD ENTER (after LINK START)
+   ========================================================= */
+.main-world.world-live .top-hud {
+    animation: hudDrop 1s var(--ease-out) both;
+}
+
+.main-world.world-live .player-status-hud {
+    animation: hudDrop 1s var(--ease-out) 0.15s both;
+}
+
+.main-world.world-live .hero-section {
+    animation: worldZoomIn 1.5s var(--ease-out) both;
+}
+
+/* =========================================================
+   AMBIENT HERO MOTION
+   ========================================================= */
+.hero-section {
+    overflow-x: clip;
+}
+
+.digital-grid-bg {
+    inset: -48px;
+    animation: gridDrift 6s linear infinite;
+}
+
+.holo-frame {
+    animation: floatY 6.5s ease-in-out infinite;
+}
+
+.avatar-image-container {
+    animation: holoFlicker 8s steps(1) infinite;
+}
+
+.online-dot {
+    animation: onlinePulse 2.2s ease-out infinite;
+}
+
+.badge-dot {
+    animation: pulseGlow 1.8s ease-in-out infinite;
+}
+
+.logo-diamond {
+    transition: rotate 0.8s var(--ease-spring);
+}
+
+.brand-logo:hover .logo-diamond {
+    rotate: 180deg;
+}
+
+/* =========================================================
+   HUD / NAV
+   ========================================================= */
+.top-hud {
+    transition: box-shadow 0.4s ease, background 0.4s ease;
+}
+
+.top-hud.scrolled {
+    background: rgba(5, 8, 15, 0.95);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.5);
+}
+
+.scroll-progress {
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 2px;
+    pointer-events: none;
+}
+
+.scroll-progress span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary), var(--accent-highlight));
+    box-shadow: 0 0 10px var(--accent-primary);
+}
+
+.nav-link {
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 2px;
+    height: 2px;
+    background: var(--accent-primary);
+    box-shadow: 0 0 8px var(--accent-primary);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s var(--ease-out);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.exploration-bar-fill {
+    position: relative;
+    overflow: hidden;
+    transition: width 0.9s var(--ease-out);
+}
+
+.exploration-bar-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 40%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    animation: shimmer 2.4s ease-in-out infinite;
+}
+
+/* =========================================================
+   PANELS, BUTTONS & MICRO-INTERACTIONS
+   ========================================================= */
+/* Cursor-following spotlight (--mx / --my set by ReinFX.initMotion) */
+.holo-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(0, 217, 255, 0.12), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.holo-panel:hover::before {
+    opacity: 1;
+}
+
+/* Tilt cards: transform is driven by JS, so don't tween it in CSS */
+.is-tilting {
+    transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease !important;
+    will-change: transform;
+}
+
+/* Magnetic buttons move via the `translate` property; keep it out of CSS transitions */
+.rpg-btn,
+.hud-ctrl-btn,
+.back-to-top-btn {
+    transition-property: opacity, transform, color, background, background-color, border-color, box-shadow;
+}
+
+.hud-ctrl-btn,
+.hud-icon-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Light sweep across buttons on hover */
+.rpg-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.75s var(--ease-out);
+    pointer-events: none;
+}
+
+.rpg-btn:hover::after {
+    left: 140%;
+}
+
+.rpg-btn:active {
+    transform: scale(0.97);
+}
+
+.fx-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.45);
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+    animation: rippleOut 0.7s var(--ease-out) forwards;
+}
+
+/* Form feedback */
+.form-group label {
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.form-group:focus-within label {
+    color: var(--accent-primary);
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.4);
+}
+
+.field-error:not(:empty) {
+    display: block;
+    animation: shakeX 0.45s ease;
+}
+
+.form-notice.info-notice {
+    animation: riseIn 0.55s var(--ease-out) both;
+}
+
+/* =========================================================
+   SYSTEM TOASTS
+   ========================================================= */
+.system-toast {
+    max-height: 120px;
+    overflow: hidden;
+    animation: toastSlideIn 0.6s var(--ease-spring) both;
+}
+
+.system-toast.leaving {
+    animation: toastOut 0.5s var(--ease-in-out) forwards;
+}
+
+.toast-progress {
+    height: 2px;
+    margin-top: 0.5rem;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-highlight));
+    transform-origin: left;
+    animation: toastProgress 3.4s linear forwards;
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+.rpg-modal {
+    transition: opacity 0.3s var(--ease-out);
+}
+
+.rpg-modal .modal-backdrop {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.rpg-modal.open .modal-backdrop {
+    opacity: 1;
+}
+
+.rpg-modal .modal-window {
+    opacity: 0;
+    transform: translateY(32px) scale(0.94);
+    filter: blur(8px);
+    transition: opacity 0.35s var(--ease-out), transform 0.55s var(--ease-spring),
+        filter 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.rpg-modal.open .modal-window {
+    opacity: 1;
+    transform: none;
+    filter: none;
+}
+
+.modal-loading-bar {
+    box-shadow: 0 0 12px var(--accent-primary);
+    transition: width 0.6s var(--ease-out);
+}
+
+.rpg-modal.open .modal-body > * {
+    animation: riseIn 0.6s var(--ease-out) both;
+}
+
+.rpg-modal.open .modal-body > :nth-child(1) { animation-delay: 0.15s; }
+.rpg-modal.open .modal-body > :nth-child(2) { animation-delay: 0.22s; }
+.rpg-modal.open .modal-body > :nth-child(3) { animation-delay: 0.29s; }
+.rpg-modal.open .modal-body > :nth-child(4) { animation-delay: 0.36s; }
+.rpg-modal.open .modal-body > :nth-child(5) { animation-delay: 0.43s; }
+.rpg-modal.open .modal-body > :nth-child(6) { animation-delay: 0.50s; }
+.rpg-modal.open .modal-body > :nth-child(n+7) { animation-delay: 0.57s; }
+
+/* =========================================================
+   CUSTOM CURSOR (position/scale/rotation driven by JS)
+   ========================================================= */
+.custom-cursor {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.custom-cursor.visible {
+    opacity: 1;
+}
+
+.cursor-dot,
+.cursor-ring {
+    top: 0;
+    left: 0;
+    transform: none;
+    will-change: translate;
+}
+
+.cursor-dot {
+    margin: -3px 0 0 -3px;
+}
+
+.cursor-ring {
+    margin: -15px 0 0 -15px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.custom-cursor.hovering .cursor-ring {
+    width: 30px;
+    height: 30px;
+    background: rgba(139, 92, 246, 0.1);
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
         scroll-behavior: auto !important;
     }
 
-    .reveal-item {
+    .reveal-item,
+    .skill-category-card .skill-chip {
         opacity: 1;
         transform: none;
+        translate: 0 0;
+        filter: none;
+    }
+
+    .skill-category-card .skill-meter-segment {
+        transform: scaleX(1);
+    }
+
+    .hero-content > * {
+        opacity: 1;
+    }
+
+    .digital-grid-bg,
+    .holo-frame {
+        animation: none;
     }
 }
